@@ -1,0 +1,5 @@
+mode: set
+learning-golang/testing/simpleTest/hello.go:5.36,6.24 1 1
+learning-golang/testing/simpleTest/hello.go:11.2,11.11 1 0
+learning-golang/testing/simpleTest/hello.go:6.24,8.3 1 1
+learning-golang/testing/simpleTest/hello.go:8.8,10.3 1 1

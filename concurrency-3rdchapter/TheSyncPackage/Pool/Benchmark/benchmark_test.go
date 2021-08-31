@@ -10,11 +10,15 @@ import (
 	"time"
 )
 
+// Not getting the sequence .  Need to look back
+
 func connectToService() interface{} {
+	fmt.Println("connectToService() is called.")
 	time.Sleep(1*time.Second)
 	return struct{}{}
 }
 func startNetworkDaemon() *sync.WaitGroup {
+	fmt.Println("startNetworkDaemon() is called.")
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
@@ -31,7 +35,7 @@ func startNetworkDaemon() *sync.WaitGroup {
 				continue
 			}
 			connectToService()
-			fmt.Fprintln(conn, "")
+			fmt.Fprintln(conn , "connec = ")
 			conn.Close()
 		}
 	}()
@@ -42,6 +46,7 @@ func init() {
 	daemonStarted.Wait()
 }
 func BenchmarkNetworkRequest(b *testing.B) {
+	fmt.Println("BenchmarkNetworkRequest() is called.")
 	for i := 0; i < b.N; i++ {
 		conn, err := net.Dial("tcp", "localhost:8080")
 		if err != nil {
