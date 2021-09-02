@@ -39,3 +39,14 @@ func BenchmarkContextSwitch(b *testing.B) {
 
 // Command to run this code :
 // go test -bench=. -cpu=1
+
+/* OUTPUT
+goos: linux
+goarch: amd64
+pkg: learning-golang/concurrency-3rdchapter/SwitchingTime
+cpu: Intel(R) Core(TM) i3-4150 CPU @ 3.50GHz
+BenchmarkContextSwitch   7080342               167.0 ns/op
+PASS
+ok      learning-golang/concurrency-3rdchapter/SwitchingTime    1.356s
+
+*/
