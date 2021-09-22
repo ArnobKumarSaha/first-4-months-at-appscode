@@ -57,15 +57,15 @@ var add = func(done <-chan interface{}, intStream <-chan int, additive int, ) <-
 
 func main() {
 	done := make(chan interface{})
-	//defer close(done)
+	defer close(done)
 	intStream := generator(done, 1, 2, 3, 4)
 	pipeline := multiply(done, add(done, multiply(done, intStream, 2), 1), 2)
 	for v := range pipeline {
 		fmt.Println(v)
 	}
 	fmt.Println("main() function completed ! ")
-	time.Sleep(4 * time.Second)
-	done <- 5
-	close(done)
-	time.Sleep(1 * time.Second)
+	time.Sleep(2 * time.Second)
+	// // done <- 5
+	//close(done)
+	//time.Sleep(2 * time.Second)
 }
