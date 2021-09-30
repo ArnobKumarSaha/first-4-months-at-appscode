@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deplyment
+  # Nothing to do with this label
+  labels:
+    app : myserver
+spec:
+  selector:
+    # These labels have to match the labels written on template.metadata.labels
+    matchLabels:
+      app: mypod
+  replicas : 3
+  template:
+    metadata:
+      name: myPod
+      labels:
+        app: mypod
+    spec:
+      # container & ports are array, so a '-' required
+      containers:
+        - name: mycontainer
+          image: arnobkumarsaha/learning_go:latest
+          #image: raihankhanraka/ecommerce-api:v1.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
