@@ -6,12 +6,15 @@ import (
 	coreV1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/kubernetes/typed/core/v1"
 )
 
-func CreateService(clientset *kubernetes.Clientset)  {
+type ServiceClient struct {
+	v1.ServiceInterface
+}
+
+func (svcClient *ServiceClient) CreateService()  {
 	ctx := context.TODO()
-	svcClient := clientset.CoreV1().Services(metav1.NamespaceDefault)
 
 	svc := coreV1.Service{
 		ObjectMeta: metav1.ObjectMeta{
@@ -24,10 +27,10 @@ func CreateService(clientset *kubernetes.Clientset)  {
 			Type: coreV1.ServiceTypeNodePort,
 			Ports: []coreV1.ServicePort{
 				{
-					NodePort: int32(30033),
+					NodePort: int32(30012),
 					Port: 2345,
 					TargetPort: intstr.IntOrString{
-						IntVal: 80,
+						IntVal: 8080,
 					},
 				},
 			},
@@ -39,9 +42,7 @@ func CreateService(clientset *kubernetes.Clientset)  {
 	}
 }
 
-func GetServiceNodePort(clientset *kubernetes.Clientset)  int32{
-	svcClient := clientset.CoreV1().Services(metav1.NamespaceDefault)
-
+func (svcClient *ServiceClient) GetServiceNodePort()  int32{
 	svc, _ := svcClient.Get(context.TODO(), "mysvc", metav1.GetOptions{})
 
 	svcPorts := svc.Spec.Ports
@@ -50,4 +51,17 @@ func GetServiceNodePort(clientset *kubernetes.Clientset)  int32{
 		return p.NodePort
 	}
 	return int32(0)
+}
+
+func (svcClient *ServiceClient) DeleteService(){
+
+	deletePolicy := metav1.DeletePropagationForeground
+	err := svcClient.Delete(context.TODO(), "mysvc", metav1.DeleteOptions{
+		PropagationPolicy: &deletePolicy,
+	})
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("service successfully Deleted")
 }

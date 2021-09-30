@@ -7,17 +7,27 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 	"path/filepath"
+	"time"
 )
 
 var clientset *kubernetes.Clientset
 
 func main()  {
-	CreateDeployment(clientset)
+	deploymentClient := DeploymentClient{DeploymentInterface: clientset.AppsV1().Deployments("default")}
+	svcClient := ServiceClient{ServiceInterface: clientset.CoreV1().Services("default")}
+
+	if deploymentClient.IsPresent("depl"){
+		deploymentClient.DeleteDeployment()
+	}
+	svcClient.DeleteService()
+	time.Sleep(time.Second * 5)
+
+	deploymentClient.CreateDeployment()
 	//ListPods(clientset)
-	ListDeployments(clientset)
+	deploymentClient.ListDeployments()
 	//DeletePod(clientset)
-	CreateService(clientset)
-	fmt.Println("Server is listening on ", GetNodeIp(clientset),":", GetServiceNodePort(clientset))
+	svcClient.CreateService()
+	fmt.Println("Server is listening on ", GetNodeIp(clientset),":", svcClient.GetServiceNodePort())
 
 }
 func init()  {
@@ -45,5 +55,6 @@ func init()  {
 	}
 
 	fmt.Println("init() completed.")
+
 
 }
