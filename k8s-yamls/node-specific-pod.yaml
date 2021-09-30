@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: popo3
+spec:
+  nodeSelector:
+    hello: world
+  containers:
+  - name: nginx-container
+    image: nginx
+    ports:
+    - containerPort: 80
+
+# Label node like this : 
+# kc label nodes NODE_NAME key:value

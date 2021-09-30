@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myservice
+spec:
+  # This selector has to match pod's labels
+  selector:
+    app: mypod
+  type: NodePort
+  ports:
+    - protocol: TCP
+      # ServicePort is needed for port-forwarding (ex: ToShowInPort : ServicePort)
+      port: 8085
+      #nodePort: 30011
+      # targetPort is equals to pod's containerPort
+      targetPort: 8080
+  externalIPs: # Newly added.
+    - 80.11.12.10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deplyment
+  # Nothing to do with this label
+  labels:
+    app : myserver
+spec:
+  selector:
+    # These labels have to match the labels written on template.metadata.labels
+    matchLabels:
+      app: mypod
+  replicas : 4
+  template:
+    metadata:
+      name: myPod
+      labels:
+        app: mypod
+    spec:
+      # container & ports are array, so a '-' required
+      containers:
+        - name: mycontainer
+          image: arnobkumarsaha/learning_go:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080

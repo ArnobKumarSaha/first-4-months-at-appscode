@@ -1,0 +1,29 @@
+1) generate key : openssl genras -out arnob.key 2048  
+
+One WAY :: 
+2) generate Certificate signing request(CSR) : openssl req -new -key arnob.key -out arnob.csr -subj "/CN=Arnob/O=developers"
+   here, CN means common-name & O means Organization
+3) Copy the ca.crt & ca.key files from /etc/kubernetes/pki/ folder by exec the controle-plane node using docker.
+4) openssl x509 -req -in arnob.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out arnob.crt -days 20
+   This command will create a ca.srl file, & importantly the arnob.crt file using ca.crt & ca.key
+
+
+5) kubectl config set-credentials arnob --client-certificate arnob.crt --client-key arnob.key
+   This will add the "arnob" user in kubeconfig file (~/.kube/config)
+6) kc config set-context arnob-kindfirst --user arnob --cluster kind-first 
+7) Now if we set the newly created context as default-context using command, kc config use-context arnob-kindfirst, we will not able to list the pods using kubectl get pods command.
+8) To allow to do this , we have to again change the default-context , & create role and rolebinding.
+9) Create the role : kc create role allow-pod-list --resource pods --verb list
+10) Create rolebinding : kc create rolebinding allow-pod-list-rb --role allow-pod-list --user Arnob 
+    here --user should be the Common name we set when creating the csr.
+11) Now after changing the context , we will able to run "kubectl get pods".
+
+
+Another WAY :: 
+2) Follow step 2 to make another csr file (-subj can be ignored), then follow step 3. 
+3) Endode the csr file :  cat arnob2.csr | base64 | tr -d "\n"  & paste that to request field of csr.yaml file
+apply the csr.yaml
+4) get the certificate using "kc get csr/arnob2 -oyaml"  command. decrypt it,  echo CERTIFICATE | base64 -d > arnob2.crt
+Now,  We have arnob.key & arnob2.crt file,  So follow step 5 to 11 like previuous.
+
+

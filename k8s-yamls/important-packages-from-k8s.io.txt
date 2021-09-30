@@ -1,0 +1,21 @@
+1) client-go :
+	tools/ -> clientcmd, cache
+	util/ -> homedir, retry, workqueue
+	kubernetes
+	kubernetes/typed/ -> apps/v1, core/v1
+	dynamic	
+	rest
+	informers
+	listers/core/v1
+2) apimachinery :
+	pkg/api -> resource, errors
+	pkg/apis/meta/v1
+	pkg/apis/meta/v1/unstructured
+	pkg/runtime/schema
+	pkg/util/runtime
+	pkg/labels
+3) api :
+	core/v1
+	apps/v1
+4) apiextensions-apiserver :
+

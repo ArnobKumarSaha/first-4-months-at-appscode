@@ -1,0 +1,7 @@
+apiVersion: "saha.com/v1"
+kind: Arnob
+metadata:
+  name: my-first-obj
+spec:
+  cronSpec: "my-cron-spec"
+  image: nginx

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: story-deployment
+spec: 
+  replicas: 3
+  selector:
+    matchLabels:
+      app: story
+  template:
+    metadata:
+      labels:
+        app: story
+    spec:
+      containers:
+        - name: story
+          image: arnobkumarsaha/academind-demo:1
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /app/story
+              name: story-volume
+      volumes:
+        - name: story-volume
+          #emptyDir: {}
+          # it is binding /data from node with /app/story form pod.
+          # so, pod restarting within the same node , is Ok now.
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate
+          # emptyDir is pod specific, whereas hostPath is node specific
