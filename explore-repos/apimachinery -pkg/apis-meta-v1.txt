@@ -1,0 +1,7 @@
+1) types.go :
+struct -- TypeMeta, ListMeta, ObjectMeta, OwnerReference,
+ListOptions, GetOptions, DeleteOptions, UpdateOptions, ApplyOptions, PatchOptions,
+Preconditions, Status, StatusDetails, StatusCause,
+List, APIVersions, APIGroup, APIGroupList, APIResource,  APIResourceList, ServerAddressByClientCIDR, GroupVersionForDiscovery,
+LabelSelector, LabelSelectorRequirement,  ManagedFieldsEntry, FieldsV1, Table, TableColumnDefinition, TableRow, TableRowCondition, TableOptions,
+PartialObjectMetadata, PartialObjectMetadataList, Condition

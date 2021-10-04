@@ -8,7 +8,7 @@
 	informers
 	listers/core/v1
 2) apimachinery :
-	pkg/api -> resource, errors
+	pkg/api -> resource, errors, meta
 	pkg/apis/meta/v1
 	pkg/apis/meta/v1/unstructured
 	pkg/runtime/schema
@@ -18,4 +18,13 @@
 	core/v1
 	apps/v1
 4) apiextensions-apiserver :
+5) sample-controller :
 
+---------------------------------------------------------
+{} means struct
+<> means interface
+() mean function
+
+{} -> (), () means methods of that struct object
+<> ->> (), () means functions of interface
+{} -> () -- () means setter-getters of that struct

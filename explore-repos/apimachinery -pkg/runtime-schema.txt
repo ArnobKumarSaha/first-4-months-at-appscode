@@ -1,0 +1,10 @@
+1) group_version.go
+parseResourceArg(), ParseKindArg(),
+{GroupResource} -> WithVersion(), Empty(), String() --  ParseGroupResource()
+{GroupKind} -> WithVersion(), Empty(), String() -- ParseGroupKind()
+{GroupVersion} -> Empty(), String(), Identifier(), WithKind(), WithResource(), KindForGroupVersionKinds() -- ParseGroupVersion()
+{GroupVersionResource} -> GroupResource(), GroupVersion(), Empty(), String() --
+{GroupVersionKind} -> GroupKind(), GroupVersion(), Empty(), String(), bestMatch(), ToAPIVersionAndKind()
+
+2) interfaces.go
+ObjectKind ->> SetGroupVersionKind(), GroupVersionKind()

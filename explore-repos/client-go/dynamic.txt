@@ -1,0 +1,10 @@
+1) Simple.go :
+dynamicClient == client *rest.RESTClient
+ConfigFor(), NewForConfig(), NewForConfigOrDie()
+type dynamicResourceClient struct {
+	client    *dynamicClient
+	namespace string
+	resource  schema.GroupVersionResource
+}
+dynamicResourceClient  => Resource(), Namespace(), Create(), Update(), UpdateStatus(),
+Delete(), DeleteCollection(), Get(), List(), Watch(), Patch(), makeURlSegments()

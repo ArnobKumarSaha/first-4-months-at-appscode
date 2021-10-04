@@ -1,0 +1,30 @@
+1) types.go :
+structs -- TypeMeta, RawExtension, Unknown
+
+2) interfaces.go :
+<GroupVersioner>, <ResourceVersioner>
+<Encoder> , <NestedObjectEncoder>
+<Decoder>, <NestedObjectDecoder>
+<Serializer>, <StorageSerializer>
+<ParameterCodec> , <ClientNegotiator>
+<Framer> , <NegotiatedSerializer>
+<ObjectDefaulter>, <ObjectVersioner>, <ObjectConverter>, <ObjectTyper>, <ObjectCreator>, <Object>
+<EquivalentResourceMapper>, <EquivalentResourceRegistry>,
+<CacheableObject>, <Unstructured>, <SelfLinker>
+
+{SerializerInfo} , {StreamSerializerInfo}
+
+2) scheme.go :
+{Scheme} ->
+[
+VersionsForGroupKind(), AllKnownTypes(), ObjectKinds(), Recognizes(),
+New(), Default(),  Name(), KnownTypes(), unstructuredToTyped(),
+
+set ~ copyAndSetTargetKind(), setTargetKind(), SetVersionPriority(),
+isQuery ~ IsUnversioned(),IsGroupRegistered(), IsVersionRegistered(),
+Prioritizing ~ PrioritizedVersionsForGroup(), PrioritizedVersionsAllGroups(), PreferredVersionsAllGroups(),
+
+Add ~ AddKnownTypes(), AddKnownTypeWithName(), AddUnversionedTypes(), addObservedVersion(),
+AddIgnoredConversionType(), AddConversionFunc(), AddGeneratedConversionFunc(), AddFieldLabelConversionFunc(), AddTypeDefaultingFunc(),
+convert ~ Convert(), ConvertFieldLabel(), ConvertToVersion(), UnsafeConvertToVersion(), generateConvertMeta()
+]
