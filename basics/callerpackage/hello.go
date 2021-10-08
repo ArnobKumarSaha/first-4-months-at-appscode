@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	called "golang_k8s/basics/calledpackage"
 	"log"
-    "github.com/ArnobKumarSaha/calledPackage"
 )
 
 func main() {
@@ -31,3 +31,7 @@ func main() {
 	}
 	fmt.Println("Hello : ", another_message)
 }
+
+
+// The last line on go.mod file was created when syncing
+// In package name, only characters, digits and underscore are allowed.

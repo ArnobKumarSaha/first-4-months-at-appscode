@@ -12,6 +12,10 @@
 COMPILER = gcc                
 LINKERFLAG = -lm
 
+# ':=' for direct assignment , it is calculated only once
+# '=' for recursive assignment, it is calculated everytime it is mentioned.
+# '?=' for conditional assignment, only calculated if not initialized yet.
+
 SRCS := $(wildcard *.c)  #  all files with the .c extension
 BINS := $(SRCS:%.c=%)   # substitution reference.  foo.c converts to foo
 

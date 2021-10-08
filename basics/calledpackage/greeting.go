@@ -1,4 +1,4 @@
-package called
+package calledpackage
 
 import (
 	"errors"
