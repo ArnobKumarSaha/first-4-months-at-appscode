@@ -26,6 +26,8 @@ var checkStatus = func(done <-chan interface{}, urls ...string) <-chan Result {
 			case <-done:
 				return
 			case results <- result:
+				// There was nothing to do in main(), if we would just send the response of the http.Get()
+				// We have to send the error too, to do something useful in main() , when error occurred.
 			}
 		}
 	}()
@@ -33,7 +35,7 @@ var checkStatus = func(done <-chan interface{}, urls ...string) <-chan Result {
 }
 
 /*
-we’ve successfully separated the concerns of error handling from our producer goroutine.
+we’ve successfully separated the concerns of error handling from our producer goroutine (checkStatus).
 */
 
 func main()  {
@@ -42,7 +44,7 @@ func main()  {
 	errCount := 0
 	urls := []string{"a", "https://www.google.com", "b", "https://badhost", "d"}
 	for result := range checkStatus(done, urls...) {
-		if result.Error != nil {
+		if result.Error != nil { // handling error from the parent process
 			fmt.Printf("error: %v\n", result.Error)
 			errCount++
 			if errCount >= 3 {

@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"time"
 )
 
+// This is a basic generator function which we have already seen in bestPractice.go
 var repeat = func(
 	done <-chan interface{},
 	values ...interface{},
@@ -16,6 +18,7 @@ var repeat = func(
 			for _, v := range values {
 				select {
 				case <-done:
+					fmt.Println("Done called in repeat().")
 					return
 				case valueStream <- v:
 				}
@@ -25,6 +28,7 @@ var repeat = func(
 	return valueStream
 }
 
+// If num=10 in take(), only 10+1 number will be generated in repeat function.
 var take = func(
 	done <-chan interface{},
 	valueStream <-chan interface{},
@@ -36,7 +40,9 @@ var take = func(
 		for i := 0; i < num; i++ {
 			select {
 			case <-done:
+				fmt.Println("Done called in take().")
 				return
+				// it means, Get the value from valueStream, then pass it to takeStream
 			case takeStream <- <-valueStream:
 			}
 		}
@@ -44,6 +50,7 @@ var take = func(
 	return takeStream
 }
 
+// repeatFn calls fn() infinitely, until stopped
 var repeatFn = func(
 	done <-chan interface{},
 	fn func() interface{},
@@ -54,6 +61,7 @@ var repeatFn = func(
 		for {
 			select {
 			case <-done:
+				fmt.Println("Done called in repeatFn().")
 				return
 			case valueStream <- fn():
 			}
@@ -73,6 +81,7 @@ var toString = func(
 		for v := range valueStream {
 			select {
 			case <-done:
+				fmt.Println("Done called in toString().")
 				return
 			case stringStream <- v.(string):
 			}
@@ -83,24 +92,37 @@ var toString = func(
 
 func main() {
 	done := make(chan interface{})
-	defer close(done)
+	//defer close(done)
 
 	fmt.Println("Using Repeat function : ")
-	for num := range take(done, repeat(done, 1), 10) {
+	for num := range take(done, repeat(done, 1,2,3), 10) {
 		fmt.Printf("%v ", num)
 	}
 
 	fmt.Println("\nUsing RepeatFn function : ")
-	rand := func() interface{} { return rand.Int() }
+	rand := func() interface{} {
+		// if the function is expensive, it takes a lot of time , as this function is not running in concurrently.
+		// This is running like .... valueStream <- fn()
+		// time.Sleep(5 * time.Second)
+		return rand.Int()
+	}
+	// passing our rand function as fn on the repeatFn()
 	for num := range take(done, repeatFn(done, rand), 10) {
 		fmt.Println(num)
 	}
 
-
 	fmt.Println("Using toString function : ")
 	var message string
-	for token := range toString(done, take(done, repeat(done, "I", "am."), 5)) {
+	for token := range toString(done, take(done, repeat(done, "I", "am."), 10)) {
 		message += token
 	}
-	fmt.Printf("message: %s...", message)
+	fmt.Printf("message: %s...\n", message)
+	close(done)
+	time.Sleep(4 * time.Second)
 }
+
+/* Why "Done called in repeat()" only printed (comment out from line number 95 to 112)? answer from stackoverflow ::
+
+because it takes only 10 elements (line 115) then it closes its stream (line 38) which in turn closes the loop of toString (line 80)
+which closes the loop in main (line 115)which in turn allows for close(done) to happen, at that point only the repeater is still trying to push.
+ */

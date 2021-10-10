@@ -5,6 +5,9 @@ import (
 	"time"
 )
 
+// Problem : doWork() will remain in memory for the lifetime of this process.
+// bcz it will not be garbage collected, as it's execution is still on-going
+
 var doWork = func(strings <-chan string) <-chan interface{} {
 	completed := make(chan interface{})
 	go func() {

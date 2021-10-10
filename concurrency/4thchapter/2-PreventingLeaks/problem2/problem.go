@@ -3,7 +3,14 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"time"
 )
+
+// This problem is almost similar with problem 1 , except
+// in problem-1 , the child process was a reader, that waits for receiving
+// here, the child process is a writer, that waits for sending
+
+// so, the solution is also too similar
 
 var newRandStream = func() <-chan int {
 	randStream := make(chan int)
@@ -23,4 +30,5 @@ func main()  {
 	for i := 1; i <= 3; i++ {
 		fmt.Printf("%d: %d\n", i, <-randStream)
 	}
+	time.Sleep(3 * time.Second)
 }
