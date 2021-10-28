@@ -4,7 +4,8 @@ noob
 
 variable
 
-
+Wildcard
+Automatic-variables
 
 advanced
 

@@ -1,0 +1,60 @@
+1) controller.go =>
+{Config} ->  Queue, ListerWatcher, Error handler, ObjectType, ResyncPeriod etc.
+<Controller> --> Run(), HasSynced(), LastSyncResourceVersion(). ~~~
+{controller} -> Config, Reflector, RWMutex , clock, processLoop()
+
+New() creates an object of controller struct
+
+<ResourceEventHandler> --> OnAdd(), OnUpdate(), OnDelete().  ~~~
+{ResourceEventHandlerFuncs} -> AddFunc(), UpdateFunc(), DeleteFunc()
+{FilteringResourceEventHandler} -> FilterFunc, ResourceEventHandler
+
+DeletionHandlingMetaNamespaceKeyFunc
+NewInformer(ListerWatcher, runtime.Object, resyncPeriod, ResourceEventHandler)
+NewIndexerInformer() = NewInformer() + Indexer
+NewTransformingInformer() = NewInformer() + TransformFunc
+NewTransformingIndexerInformer() + NewInformer() + Indexer + TransformFunc
+
+
+
+2) index.go =>
+<Indexer>
+IndexFuncToKeyFuncAdapter()
+MetaNamespaceIndexFunc()
+
+
+
+3) listwatch.go =>
+<Lister> --> List()
+<Watcher> --> Watch()
+<ListerWatcher> ~~~
+{ListWatch} -> ListFunc, WatchFunc
+
+NewListWatchFromClient(Getter, resource, ns, fieldSelector)
+NewFilteredListWatchFromClient()
+
+
+
+
+4) store.go =>
+<Store> --> Add(), Update(), Delete(), List(), ListKeys(), Get(), GetByKey(), replace(), Resync()   ~~~
+{cache} -> ThreadSafeStore, KeyFunc, funcs of <Store>,  some index-related functions
+
+{KeyError} -> Obj, error,  Error(), Unwrap()
+MetaNamespaceKeyFunc()
+SplitMetaNamespaceKey()
+NewStore()
+NewIndexer()
+
+
+
+
+5) reflector.go =>
+{reflector} -> GroupVersionKind, ListWatcher, reflect.Type etc.
+-> setExpectedType(), Run()*, resyncChan(), ListAndWatch()*, syncWith(), watchHandler(), LastSyncResourceVersion(), setLastSyncResourceVersion(),
+    relistResourceVersion(), setIsLastSyncResourceVersionUnavailable()
+
+DefaultWatchErrorHandler()
+NewNamespaceKeyedIndexerAndReflector()
+NewNamedReflector(), NewReflector()
+isExpiredError(), isTooLargeResourceVersionError()

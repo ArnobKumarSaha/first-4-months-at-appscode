@@ -67,6 +67,8 @@ block just above package
 <> means interface
 () mean function
 
+* means important
+~~~ means all the functions of this interface are implemented by all the structs below of this block
 {} -> (), () means methods of that struct object
 <> ->> (), () means functions of interface
 {} -> () -- () means setter-getters of that struct
